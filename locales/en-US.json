@@ -1,0 +1,289 @@
+{
+  "site": {
+    "title": "My Blog",
+    "description": "A modern full-stack personal blog application built with Nuxt 3"
+  },
+  "nav": {
+    "home": "Home",
+    "articles": "Articles",
+    "categories": "Categories",
+    "tags": "Tags",
+    "about": "About",
+    "search": "Search",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "dashboard": "Dashboard"
+  },
+  "home": {
+    "hero": {
+      "title": "Welcome to My Blog",
+      "subtitle": "Documenting my technical growth, sharing programming insights, and exploring cutting-edge technologies. Here I share my technical journey and learning notes."
+    },
+    "featured": "Featured Articles",
+    "viewAll": "View All",
+    "recentPosts": "Recent Posts",
+    "categories": "Categories"
+  },
+  "article": {
+    "readMore": "Read More",
+    "readingTime": "{time} min read",
+    "views": "{count} views",
+    "likes": "{count} likes",
+    "comments": "{count} comments",
+    "publishedAt": "Published at",
+    "updatedAt": "Updated at",
+    "author": "Author",
+    "category": "Category",
+    "tags": "Tags",
+    "share": "Share",
+    "prev": "Previous",
+    "next": "Next",
+    "related": "Related Articles",
+    "tableOfContents": "Table of Contents",
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    }
+  },
+  "articles": {
+    "title": "Articles",
+    "searchPlaceholder": "Search articles...",
+    "allCategories": "All Categories",
+    "noResults": "No articles found",
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}"
+    }
+  },
+  "comment": {
+    "title": "Comments",
+    "placeholder": "Write your comment...",
+    "submit": "Submit Comment",
+    "reply": "Reply",
+    "cancel": "Cancel",
+    "noComments": "No comments yet. Be the first to comment!",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "spam": "Spam"
+    }
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search articles, tags, categories...",
+    "button": "Search",
+    "noResults": "No results found for \"{keyword}\"",
+    "hint": "Enter keywords to start searching",
+    "articles": "Articles",
+    "tags": "Related Tags",
+    "categories": "Related Categories"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "subtitle": "Enter your email and password to login",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Login",
+      "noAccount": "Don't have an account?",
+      "registerNow": "Register now"
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create a new account to start your blog journey",
+      "username": "Username",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Register",
+      "hasAccount": "Already have an account?",
+      "loginNow": "Login now"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords do not match",
+      "usernameRequired": "Username is required",
+      "usernameMin": "Username must be at least 3 characters"
+    },
+    "error": {
+      "loginFailed": "Login failed, please check your email and password",
+      "registerFailed": "Registration failed, please try again",
+      "emailExists": "Email already registered",
+      "usernameExists": "Username already taken"
+    },
+    "success": {
+      "loginSuccess": "Login successful",
+      "registerSuccess": "Registration successful",
+      "logoutSuccess": "Logged out successfully"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Dashboard",
+      "articleCount": "Total Articles",
+      "viewCount": "Total Views",
+      "commentCount": "Comments",
+      "userCount": "Users",
+      "recentArticles": "Recent Articles",
+      "recentComments": "Recent Comments",
+      "growth": "+{percent}% from last month"
+    },
+    "articles": {
+      "title": "Articles",
+      "create": "New Article",
+      "edit": "Edit Article",
+      "searchPlaceholder": "Search articles...",
+      "allStatus": "All Status",
+      "table": {
+        "title": "Title",
+        "category": "Category",
+        "status": "Status",
+        "views": "Views",
+        "comments": "Comments",
+        "createdAt": "Created At",
+        "actions": "Actions"
+      },
+      "editor": {
+        "titlePlaceholder": "Article title",
+        "contentPlaceholder": "Write your article content in Markdown...",
+        "summary": "Summary",
+        "summaryPlaceholder": "Article summary...",
+        "cover": "Cover Image",
+        "coverUpload": "Click to upload cover",
+        "category": "Category",
+        "categoryPlaceholder": "Select category",
+        "tags": "Tags",
+        "tagsPlaceholder": "Add tags",
+        "saveDraft": "Save Draft",
+        "publish": "Publish Article",
+        "preview": "Preview",
+        "hidePreview": "Hide Preview"
+      },
+      "deleteConfirm": "Are you sure you want to delete this article?"
+    },
+    "categories": {
+      "title": "Categories",
+      "create": "New Category",
+      "name": "Name",
+      "slug": "Slug",
+      "description": "Description",
+      "articleCount": "Articles",
+      "actions": "Actions",
+      "deleteConfirm": "Are you sure you want to delete this category?"
+    },
+    "tags": {
+      "title": "Tags",
+      "create": "New Tag",
+      "name": "Name",
+      "slug": "Slug",
+      "articleCount": "articles",
+      "deleteConfirm": "Are you sure you want to delete this tag?"
+    },
+    "comments": {
+      "title": "Comments",
+      "allStatus": "All Status",
+      "approve": "Approve",
+      "reject": "Reject",
+      "markSpam": "Mark as Spam",
+      "delete": "Delete",
+      "deleteConfirm": "Are you sure you want to delete this comment?",
+      "noComments": "No comments"
+    },
+    "users": {
+      "title": "Users",
+      "searchPlaceholder": "Search users...",
+      "allRoles": "All Roles",
+      "table": {
+        "user": "User",
+        "email": "Email",
+        "role": "Role",
+        "createdAt": "Registered At",
+        "actions": "Actions"
+      },
+      "roles": {
+        "admin": "Admin",
+        "editor": "Editor",
+        "user": "User"
+      },
+      "edit": {
+        "title": "Edit User",
+        "nickname": "Nickname",
+        "role": "Role",
+        "bio": "Bio"
+      },
+      "deleteConfirm": "Are you sure you want to delete this user?"
+    },
+    "settings": {
+      "title": "Settings",
+      "general": "General Settings",
+      "siteName": "Site Name",
+      "siteDescription": "Site Description",
+      "siteUrl": "Site URL",
+      "seo": "SEO Settings",
+      "seoKeywords": "SEO Keywords",
+      "seoDescription": "SEO Description",
+      "email": "Email Settings",
+      "smtpHost": "SMTP Host",
+      "smtpPort": "SMTP Port",
+      "smtpUser": "SMTP Username",
+      "smtpPassword": "SMTP Password",
+      "save": "Save Settings",
+      "saved": "Settings saved"
+    }
+  },
+  "about": {
+    "title": "About Me",
+    "bio": "A full-stack developer passionate about technology, focusing on web development and architecture design. Sharing my technical insights and learning notes here, hoping to help you.",
+    "skills": "Tech Stack",
+    "experience": "Work Experience",
+    "contact": "Contact"
+  },
+  "footer": {
+    "copyright": "© {year} My Blog. All rights reserved.",
+    "poweredBy": "Powered by Nuxt 3"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back",
+    "submit": "Submit",
+    "reset": "Reset",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "all": "All",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "and": "and"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "switch": "Switch Language",
+    "zh": "中文",
+    "en": "English"
+  }
+}

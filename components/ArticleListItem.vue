@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="`/articles/${article.id}`"
+    :to="localePath(`/articles/${article.id}`)"
     class="group flex items-start space-x-4 rounded-lg border p-4 transition-all hover:bg-accent"
   >
     <div class="flex-1 space-y-1">
@@ -8,7 +8,7 @@
         <span class="text-xs font-medium text-primary">{{ article.category }}</span>
         <span class="text-xs text-muted-foreground">{{ article.createdAt }}</span>
         <span v-if="article.readingTime" class="text-xs text-muted-foreground">
-          · {{ article.readingTime }} 分钟阅读
+          · {{ $t('article.readingTime', { time: article.readingTime }) }}
         </span>
       </div>
       <h3 class="font-semibold transition-colors group-hover:text-primary">
@@ -23,6 +23,8 @@
 </template>
 
 <script setup lang="ts">
+const localePath = useLocalePath()
+
 interface Article {
   id: number | string
   title: string

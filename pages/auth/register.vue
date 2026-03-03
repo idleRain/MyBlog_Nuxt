@@ -2,13 +2,13 @@
   <div class="flex min-h-screen items-center justify-center px-4 py-12">
     <Card class="w-full max-w-md">
       <CardHeader class="space-y-1">
-        <CardTitle class="text-2xl font-bold">注册</CardTitle>
-        <CardDescription>创建一个新账户开始您的博客之旅</CardDescription>
+        <CardTitle class="text-2xl font-bold">{{ $t('auth.register.title') }}</CardTitle>
+        <CardDescription>{{ $t('auth.register.subtitle') }}</CardDescription>
       </CardHeader>
       <CardContent>
         <form class="space-y-4" @submit.prevent="handleRegister">
           <div class="space-y-2">
-            <Label for="username">用户名</Label>
+            <Label for="username">{{ $t('auth.register.username') }}</Label>
             <Input
               id="username"
               v-model="form.username"
@@ -18,7 +18,7 @@
             />
           </div>
           <div class="space-y-2">
-            <Label for="email">邮箱</Label>
+            <Label for="email">{{ $t('auth.register.email') }}</Label>
             <Input
               id="email"
               v-model="form.email"
@@ -28,7 +28,7 @@
             />
           </div>
           <div class="space-y-2">
-            <Label for="password">密码</Label>
+            <Label for="password">{{ $t('auth.register.password') }}</Label>
             <Input
               id="password"
               v-model="form.password"
@@ -38,7 +38,7 @@
             />
           </div>
           <div class="space-y-2">
-            <Label for="confirmPassword">确认密码</Label>
+            <Label for="confirmPassword">{{ $t('auth.register.confirmPassword') }}</Label>
             <Input
               id="confirmPassword"
               v-model="form.confirmPassword"
@@ -53,17 +53,17 @@
           <Button type="submit" class="w-full" :disabled="loading">
             <span v-if="loading" class="flex items-center">
               <Icon name="lucide:loader-2" class="mr-2 h-4 w-4 animate-spin" />
-              注册中...
+              {{ $t('common.loading') }}
             </span>
-            <span v-else>注册</span>
+            <span v-else>{{ $t('auth.register.submit') }}</span>
           </Button>
         </form>
       </CardContent>
       <CardFooter class="flex flex-col space-y-4">
         <div class="text-sm text-muted-foreground">
-          已有账户？
-          <NuxtLink to="/auth/login" class="text-primary hover:underline">
-            立即登录
+          {{ $t('auth.register.hasAccount') }}
+          <NuxtLink :to="localePath('/auth/login')" class="text-primary hover:underline">
+            {{ $t('auth.register.loginNow') }}
           </NuxtLink>
         </div>
       </CardFooter>
@@ -72,8 +72,11 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+const localePath = useLocalePath()
+
 useHead({
-  title: '注册 - My Blog',
+  title: t('auth.register.title') + ' - ' + t('site.title'),
 })
 
 definePageMeta({
@@ -92,12 +95,12 @@ const error = ref('')
 
 const handleRegister = async () => {
   if (form.password !== form.confirmPassword) {
-    error.value = '两次输入的密码不一致'
+    error.value = t('auth.validation.passwordMismatch')
     return
   }
 
   if (form.password.length < 6) {
-    error.value = '密码长度至少为 6 位'
+    error.value = t('auth.validation.passwordMin')
     return
   }
 
@@ -120,12 +123,12 @@ const handleRegister = async () => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       
       // Redirect to home
-      navigateTo('/')
+      navigateTo(localePath('/'))
     } else {
       error.value = response.message
     }
   } catch (e) {
-    error.value = '注册失败，请稍后重试'
+    error.value = t('auth.error.registerFailed')
   } finally {
     loading.value = false
   }

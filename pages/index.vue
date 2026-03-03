@@ -3,23 +3,23 @@
     <!-- Hero Section -->
     <section class="flex flex-col items-center justify-center space-y-4 py-12 text-center">
       <h1 class="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-        欢迎来到我的博客
+        {{ $t('home.hero.title') }}
       </h1>
       <p class="max-w-[700px] text-lg text-muted-foreground">
-        记录技术成长，分享编程心得，探索前沿技术。在这里，我将分享我的技术旅程和学习笔记。
+        {{ $t('home.hero.subtitle') }}
       </p>
       <div class="flex items-center space-x-4">
         <NuxtLink
-          to="/articles"
+          :to="localePath('/articles')"
           class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
         >
-          浏览文章
+          {{ $t('article.readMore') }}
         </NuxtLink>
         <NuxtLink
-          to="/about"
+          :to="localePath('/about')"
           class="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
         >
-          关于我
+          {{ $t('nav.about') }}
         </NuxtLink>
       </div>
     </section>
@@ -27,9 +27,9 @@
     <!-- Featured Articles -->
     <section class="space-y-6">
       <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold">精选文章</h2>
-        <NuxtLink to="/articles" class="text-sm text-muted-foreground hover:text-foreground">
-          查看全部 →
+        <h2 class="text-2xl font-bold">{{ $t('home.featured') }}</h2>
+        <NuxtLink :to="localePath('/articles')" class="text-sm text-muted-foreground hover:text-foreground">
+          {{ $t('home.viewAll') }} →
         </NuxtLink>
       </div>
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -43,12 +43,12 @@
 
     <!-- Categories -->
     <section class="space-y-6">
-      <h2 class="text-2xl font-bold">分类</h2>
+      <h2 class="text-2xl font-bold">{{ $t('home.categories') }}</h2>
       <div class="flex flex-wrap gap-2">
         <NuxtLink
           v-for="category in categories"
           :key="category.id"
-          :to="`/categories/${category.slug}`"
+          :to="localePath(`/categories/${category.slug}`)"
           class="inline-flex items-center rounded-full border px-4 py-2 text-sm transition-colors hover:bg-accent"
         >
           {{ category.name }}
@@ -59,7 +59,7 @@
 
     <!-- Recent Posts -->
     <section class="space-y-6">
-      <h2 class="text-2xl font-bold">最新文章</h2>
+      <h2 class="text-2xl font-bold">{{ $t('home.recentPosts') }}</h2>
       <div class="space-y-4">
         <ArticleListItem
           v-for="article in recentArticles"
@@ -72,8 +72,11 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+const localePath = useLocalePath()
+
 useHead({
-  title: '首页 - My Blog',
+  title: t('nav.home') + ' - ' + t('site.title'),
 })
 
 // Mock data for demonstration

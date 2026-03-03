@@ -1,14 +1,14 @@
 <template>
   <div class="space-y-8">
     <div class="flex items-center justify-between">
-      <h1 class="text-3xl font-bold">文章</h1>
+      <h1 class="text-3xl font-bold">{{ $t('articles.title') }}</h1>
       <div class="flex items-center space-x-4">
         <div class="relative">
           <Icon name="lucide:search" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="搜索文章..."
+            :placeholder="$t('articles.searchPlaceholder')"
             class="h-10 w-[250px] rounded-md border border-input bg-background pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
@@ -16,7 +16,7 @@
           v-model="selectedCategory"
           class="h-10 rounded-md border border-input bg-background px-4 text-sm outline-none focus:ring-2 focus:ring-ring"
         >
-          <option value="">全部分类</option>
+          <option value="">{{ $t('articles.allCategories') }}</option>
           <option v-for="category in categories" :key="category.id" :value="category.slug">
             {{ category.name }}
           </option>
@@ -34,7 +34,7 @@
 
     <div v-if="filteredArticles.length === 0" class="flex flex-col items-center justify-center py-12">
       <Icon name="lucide:file-x" class="h-12 w-12 text-muted-foreground" />
-      <p class="mt-4 text-lg text-muted-foreground">没有找到相关文章</p>
+      <p class="mt-4 text-lg text-muted-foreground">{{ $t('articles.noResults') }}</p>
     </div>
 
     <!-- Pagination -->
@@ -45,17 +45,17 @@
           class="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium transition-colors hover:bg-accent disabled:opacity-50"
           @click="currentPage--"
         >
-          上一页
+          {{ $t('articles.pagination.prev') }}
         </button>
         <span class="text-sm text-muted-foreground">
-          第 {{ currentPage }} / {{ totalPages }} 页
+          {{ $t('articles.pagination.page', { current: currentPage, total: totalPages }) }}
         </span>
         <button
           :disabled="currentPage === totalPages"
           class="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium transition-colors hover:bg-accent disabled:opacity-50"
           @click="currentPage++"
         >
-          下一页
+          {{ $t('articles.pagination.next') }}
         </button>
       </nav>
     </div>
@@ -63,8 +63,11 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+const localePath = useLocalePath()
+
 useHead({
-  title: '文章 - My Blog',
+  title: t('articles.title') + ' - ' + t('site.title'),
 })
 
 const searchQuery = ref('')

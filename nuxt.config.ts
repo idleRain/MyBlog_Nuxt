@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@nuxt/icon'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@nuxt/icon', '@nuxtjs/i18n'],
 
   typescript: {
     strict: true,
@@ -61,5 +61,32 @@ export default defineNuxtConfig({
 
   icon: {
     serverBundle: 'auto',
+  },
+
+  i18n: {
+    locales: [
+      {
+        code: 'zh',
+        name: '中文',
+        file: 'zh.json',
+      },
+      {
+        code: 'en',
+        name: 'English',
+        file: 'en.json',
+      },
+    ],
+    defaultLocale: 'zh',
+    lazy: true,
+    langDir: 'locales',
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+    },
+    compilation: {
+      strictMessage: false,
+    },
   },
 })

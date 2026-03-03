@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="`/articles/${article.id}`"
+    :to="localePath(`/articles/${article.id}`)"
     class="group block overflow-hidden rounded-lg border bg-card transition-all hover:shadow-lg"
   >
     <div class="aspect-video overflow-hidden">
@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+const localePath = useLocalePath()
+
 interface Article {
   id: number | string
   title: string

@@ -7,16 +7,15 @@
         alt="Profile"
         class="h-32 w-32 rounded-full"
       />
-      <h1 class="text-4xl font-bold">关于我</h1>
+      <h1 class="text-4xl font-bold">{{ $t('about.title') }}</h1>
       <p class="max-w-2xl text-lg text-muted-foreground">
-        一名热爱技术的全栈开发工程师，专注于 Web 开发和架构设计。
-        在这里分享我的技术心得和学习笔记，希望能对你有所帮助。
+        {{ $t('about.bio') }}
       </p>
     </section>
 
     <!-- Skills Section -->
     <section class="space-y-6">
-      <h2 class="text-2xl font-bold">技术栈</h2>
+      <h2 class="text-2xl font-bold">{{ $t('about.skills') }}</h2>
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <div
           v-for="skill in skills"
@@ -36,7 +35,7 @@
 
     <!-- Experience Section -->
     <section class="space-y-6">
-      <h2 class="text-2xl font-bold">工作经历</h2>
+      <h2 class="text-2xl font-bold">{{ $t('about.experience') }}</h2>
       <div class="space-y-6">
         <div
           v-for="experience in experiences"
@@ -57,7 +56,7 @@
 
     <!-- Contact Section -->
     <section class="space-y-6">
-      <h2 class="text-2xl font-bold">联系方式</h2>
+      <h2 class="text-2xl font-bold">{{ $t('about.contact') }}</h2>
       <div class="flex flex-wrap gap-4">
         <a
           v-for="contact in contacts"
@@ -76,8 +75,10 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+
 useHead({
-  title: '关于 - My Blog',
+  title: t('nav.about') + ' - ' + t('site.title'),
 })
 
 const skills = ref([

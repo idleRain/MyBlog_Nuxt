@@ -2,13 +2,13 @@
   <div class="flex min-h-screen items-center justify-center px-4 py-12">
     <Card class="w-full max-w-md">
       <CardHeader class="space-y-1">
-        <CardTitle class="text-2xl font-bold">登录</CardTitle>
-        <CardDescription>输入您的邮箱和密码登录账户</CardDescription>
+        <CardTitle class="text-2xl font-bold">{{ $t('auth.login.title') }}</CardTitle>
+        <CardDescription>{{ $t('auth.login.subtitle') }}</CardDescription>
       </CardHeader>
       <CardContent>
         <form class="space-y-4" @submit.prevent="handleLogin">
           <div class="space-y-2">
-            <Label for="email">邮箱</Label>
+            <Label for="email">{{ $t('auth.login.email') }}</Label>
             <Input
               id="email"
               v-model="form.email"
@@ -18,7 +18,7 @@
             />
           </div>
           <div class="space-y-2">
-            <Label for="password">密码</Label>
+            <Label for="password">{{ $t('auth.login.password') }}</Label>
             <Input
               id="password"
               v-model="form.password"
@@ -33,17 +33,17 @@
           <Button type="submit" class="w-full" :disabled="loading">
             <span v-if="loading" class="flex items-center">
               <Icon name="lucide:loader-2" class="mr-2 h-4 w-4 animate-spin" />
-              登录中...
+              {{ $t('common.loading') }}
             </span>
-            <span v-else>登录</span>
+            <span v-else>{{ $t('auth.login.submit') }}</span>
           </Button>
         </form>
       </CardContent>
       <CardFooter class="flex flex-col space-y-4">
         <div class="text-sm text-muted-foreground">
-          还没有账户？
-          <NuxtLink to="/auth/register" class="text-primary hover:underline">
-            立即注册
+          {{ $t('auth.login.noAccount') }}
+          <NuxtLink :to="localePath('/auth/register')" class="text-primary hover:underline">
+            {{ $t('auth.login.registerNow') }}
           </NuxtLink>
         </div>
       </CardFooter>
@@ -52,8 +52,11 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+const localePath = useLocalePath()
+
 useHead({
-  title: '登录 - My Blog',
+  title: t('auth.login.title') + ' - ' + t('site.title'),
 })
 
 definePageMeta({
@@ -84,12 +87,12 @@ const handleLogin = async () => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       
       // Redirect to home
-      navigateTo('/')
+      navigateTo(localePath('/'))
     } else {
       error.value = response.message
     }
   } catch (e) {
-    error.value = '登录失败，请稍后重试'
+    error.value = t('auth.error.loginFailed')
   } finally {
     loading.value = false
   }

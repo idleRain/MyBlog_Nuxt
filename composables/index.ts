@@ -3,3 +3,4 @@ export { useReadingProgress, type UseReadingProgressOptions } from './useReading
 export { useTheme, type Theme, type UseThemeOptions } from './useTheme'
 export { useSearch, type UseSearchOptions } from './useSearch'
 export { useIntersectionObserver, type UseIntersectionObserverOptions } from './useIntersectionObserver'
+export { useApiError, type UseApiErrorOptions } from './useApiError'

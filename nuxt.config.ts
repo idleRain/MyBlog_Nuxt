@@ -7,7 +7,13 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@nuxt/icon', '@nuxtjs/i18n'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode',
+    '@nuxt/icon',
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
+  ],
 
   typescript: {
     strict: true,
@@ -29,17 +35,17 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // Server-side only
-    databaseHost: process.env.DB_HOST || 'localhost',
-    databasePort: process.env.DB_PORT || 3306,
-    databaseUser: process.env.DB_USER || 'username',
-    databasePassword: process.env.DB_PASSWORD || 'password',
-    databaseName: process.env.DB_NAME || 'blog',
-    mongodbUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/blog',
-    jwtSecret: process.env.JWT_SECRET || 'your-secret-key',
+    // Server-side only - these MUST be set via environment variables in production
+    databaseHost: process.env.DB_HOST,
+    databasePort: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : undefined,
+    databaseUser: process.env.DB_USER,
+    databasePassword: process.env.DB_PASSWORD,
+    databaseName: process.env.DB_NAME,
+    mongodbUri: process.env.MONGODB_URI,
+    jwtSecret: process.env.JWT_SECRET,
     jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
     uploadDir: process.env.UPLOAD_DIR || './uploads',
-    maxFileSize: parseInt(process.env.MAX_FILE_SIZE || '10485760'),
+    maxFileSize: process.env.MAX_FILE_SIZE ? parseInt(process.env.MAX_FILE_SIZE) : 10485760,
     // Public
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
@@ -88,5 +94,9 @@ export default defineNuxtConfig({
     compilation: {
       strictMessage: false,
     },
+  },
+
+  pinia: {
+    storesDirs: ['./stores/**'],
   },
 })

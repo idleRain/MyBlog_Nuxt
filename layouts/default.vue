@@ -6,7 +6,9 @@
         <NuxtLink :to="localePath('/')" class="flex items-center space-x-2">
           <span class="text-xl font-bold">{{ $t('site.title') }}</span>
         </NuxtLink>
-        <nav class="flex items-center space-x-6">
+        
+        <!-- Desktop Navigation -->
+        <nav class="hidden items-center space-x-6 md:flex">
           <NuxtLink
             v-for="item in navItems"
             :key="item.path"
@@ -17,15 +19,22 @@
             {{ $t(item.label) }}
           </NuxtLink>
         </nav>
+        
         <div class="flex items-center space-x-2">
-          <LanguageSwitcher />
-          <button
-            class="rounded-md p-2 hover:bg-accent"
-            :title="isDark ? $t('theme.light') : $t('theme.dark')"
-            @click="toggleTheme"
-          >
-            <Icon :name="isDark ? 'lucide:sun' : 'lucide:moon'" class="h-5 w-5" />
-          </button>
+          <!-- Desktop Controls -->
+          <div class="hidden items-center space-x-2 md:flex">
+            <LanguageSwitcher />
+            <button
+              class="rounded-md p-2 hover:bg-accent"
+              :title="isDark ? $t('theme.light') : $t('theme.dark')"
+              @click="toggleTheme"
+            >
+              <Icon :name="isDark ? 'lucide:sun' : 'lucide:moon'" class="h-5 w-5" />
+            </button>
+          </div>
+          
+          <!-- Mobile Menu -->
+          <MobileMenu />
         </div>
       </div>
     </header>

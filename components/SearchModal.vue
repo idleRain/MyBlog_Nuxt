@@ -2,9 +2,11 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const isOpen = ref(false)
-const searchQuery = ref('')
-const searchResults = ref<{
+const isOpen = shallowRef(false)
+const searchQuery = shallowRef('')
+const isLoading = shallowRef(false)
+
+const searchResults = shallowRef<{
   articles: Array<{ id: number; title: string; summary: string }>
   tags: Array<{ name: string; slug: string }>
   categories: Array<{ name: string; slug: string }>
@@ -14,10 +16,8 @@ const searchResults = ref<{
   categories: [],
 })
 
-const isLoading = ref(false)
-
 // Debounced search
-let searchTimeout: NodeJS.Timeout | null = null
+let searchTimeout: ReturnType<typeof setTimeout> | null = null
 
 const handleSearch = async () => {
   if (!searchQuery.value.trim()) {
@@ -29,7 +29,6 @@ const handleSearch = async () => {
 
   try {
     // TODO: Replace with actual API call
-    // Simulating search results
     await new Promise(resolve => setTimeout(resolve, 300))
     
     searchResults.value = {

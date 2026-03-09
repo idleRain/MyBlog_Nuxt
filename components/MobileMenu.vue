@@ -1,8 +1,9 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const localePath = useLocalePath()
-const colorMode = useColorMode()
-const isOpen = ref(false)
+const { preference, isDark, toggleTheme } = useTheme()
+
+const isOpen = shallowRef(false)
 
 const navItems = [
   { path: '/', label: 'nav.home', icon: 'lucide:home' },
@@ -11,27 +12,21 @@ const navItems = [
   { path: '/about', label: 'nav.about', icon: 'lucide:user' },
 ]
 
-const isDark = computed(() => colorMode.value === 'dark')
-
-const toggleTheme = () => {
-  colorMode.preference = isDark.value ? 'light' : 'dark'
-}
-
 const closeMenu = () => {
   isOpen.value = false
 }
 
 // Lock body scroll when menu is open
 watch(isOpen, (value) => {
-  if (value) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = value ? 'hidden' : ''
   }
 })
 
 onUnmounted(() => {
-  document.body.style.overflow = ''
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = ''
+  }
 })
 </script>
 

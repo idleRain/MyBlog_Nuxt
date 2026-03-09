@@ -10,11 +10,11 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const activeId = ref('')
-const tocItems = ref<TocItem[]>([])
+const activeId = shallowRef('')
+const tocItems = shallowRef<TocItem[]>([])
 
 // Parse headings from content
-const parseHeadings = (html: string) => {
+const parseHeadings = (html: string): TocItem[] => {
   const headings: TocItem[] = []
   const regex = /<h([2-4])[^>]*id="([^"]+)"[^>]*>(.*?)<\/h\1>/g
   let match
@@ -30,45 +30,47 @@ const parseHeadings = (html: string) => {
   return headings
 }
 
+// Scroll to heading
+const { scrollToElement } = useScroll()
+
+const handleHeadingClick = (id: string) => {
+  scrollToElement(`#${id}`, 100)
+}
+
+// Intersection observer for active heading
+const { observe, disconnect } = useIntersectionObserver({
+  rootMargin: '-80px 0px -80% 0px',
+})
+
 onMounted(() => {
   // Parse headings
   tocItems.value = parseHeadings(props.content)
-
-  // Observe headings for active state
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          activeId.value = entry.target.id
-        }
-      })
-    },
-    { rootMargin: '-80px 0px -80% 0px' }
-  )
 
   // Observe all headings
   nextTick(() => {
     tocItems.value.forEach((item) => {
       const element = document.getElementById(item.id)
       if (element) {
+        // Create a new observer for each heading
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                activeId.value = item.id
+              }
+            })
+          },
+          { rootMargin: '-80px 0px -80% 0px' }
+        )
         observer.observe(element)
       }
     })
   })
-
-  onUnmounted(() => {
-    observer.disconnect()
-  })
 })
 
-const scrollToHeading = (id: string) => {
-  const element = document.getElementById(id)
-  if (element) {
-    const offset = 100
-    const top = element.getBoundingClientRect().top + window.scrollY - offset
-    window.scrollTo({ top, behavior: 'smooth' })
-  }
-}
+onUnmounted(() => {
+  disconnect()
+})
 </script>
 
 <template>
@@ -85,7 +87,7 @@ const scrollToHeading = (id: string) => {
           item.level === 3 ? 'pl-4' : '',
           item.level === 4 ? 'pl-6' : '',
         ]"
-        @click="scrollToHeading(item.id)"
+        @click="handleHeadingClick(item.id)"
       >
         {{ item.text }}
       </button>

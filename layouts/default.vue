@@ -62,7 +62,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const localePath = useLocalePath()
-const colorMode = useColorMode()
+const { isDark, toggleTheme } = useTheme()
 
 const navItems = [
   { path: '/', label: 'nav.home' },
@@ -70,12 +70,6 @@ const navItems = [
   { path: '/archives', label: 'nav.articles' },
   { path: '/about', label: 'nav.about' },
 ]
-
-const isDark = computed(() => colorMode.value === 'dark')
-
-const toggleTheme = () => {
-  colorMode.preference = isDark.value ? 'light' : 'dark'
-}
 
 useHead({
   title: t('site.title'),

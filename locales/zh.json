@@ -296,5 +296,13 @@
       "description": "抱歉，服务器发生了错误，请稍后重试。"
     },
     "goBackHome": "返回首页"
+  },
+  "validation": {
+    "required": "此字段为必填项",
+    "email": "请输入有效的邮箱地址",
+    "minLength": "至少需要 {min} 个字符",
+    "maxLength": "最多不能超过 {max} 个字符",
+    "pattern": "格式不正确",
+    "confirm": "两次输入不一致"
   }
 }

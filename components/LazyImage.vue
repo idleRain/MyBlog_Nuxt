@@ -12,9 +12,14 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23f1f5f9" width="400" height="300"/%3E%3C/svg%3E',
 })
 
-const imageRef = ref<HTMLImageElement>()
-const isLoaded = ref(false)
-const hasError = ref(false)
+const imageRef = shallowRef<HTMLImageElement>()
+const isLoaded = shallowRef(false)
+const hasError = shallowRef(false)
+
+const { observe, isIntersecting } = useIntersectionObserver({
+  rootMargin: '50px',
+  once: true,
+})
 
 const handleLoad = () => {
   isLoaded.value = true
@@ -24,27 +29,17 @@ const handleError = () => {
   hasError.value = true
 }
 
-// Intersection Observer for lazy loading
-onMounted(() => {
-  if (!imageRef.value) return
+// Observe image element
+watchEffect(() => {
+  if (imageRef.value) {
+    observe(imageRef.value)
+  }
+})
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && imageRef.value) {
-          imageRef.value.src = props.src
-          observer.unobserve(entry.target)
-        }
-      })
-    },
-    { rootMargin: '50px' }
-  )
-
-  observer.observe(imageRef.value)
-
-  onUnmounted(() => {
-    observer.disconnect()
-  })
+// Load image when intersecting
+const imageSrc = computed(() => {
+  if (!isIntersecting.value) return props.placeholder
+  return props.src
 })
 </script>
 
@@ -59,7 +54,7 @@ onMounted(() => {
     <!-- Image -->
     <img
       ref="imageRef"
-      :src="placeholder"
+      :src="imageSrc"
       :alt="alt"
       :width="width"
       :height="height"

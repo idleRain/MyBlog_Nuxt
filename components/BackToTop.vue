@@ -1,22 +1,5 @@
 <script setup lang="ts">
-const isVisible = ref(false)
-
-const checkVisibility = () => {
-  isVisible.value = window.scrollY > 300
-}
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', checkVisibility, { passive: true })
-  checkVisibility()
-
-  onUnmounted(() => {
-    window.removeEventListener('scroll', checkVisibility)
-  })
-})
+const { scrollToTop, isPastThreshold } = useScroll({ threshold: 300 })
 </script>
 
 <template>
@@ -27,7 +10,7 @@ onMounted(() => {
     leave-to-class="opacity-0"
   >
     <button
-      v-if="isVisible"
+      v-if="isPastThreshold"
       class="fixed bottom-8 right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
       aria-label="Back to top"
       @click="scrollToTop"

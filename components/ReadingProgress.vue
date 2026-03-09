@@ -9,7 +9,7 @@ onMounted(() => {
     readingProgress.value = Math.min(100, Math.max(0, progress))
   }
 
-  window.addEventListener('scroll', updateProgress)
+  window.addEventListener('scroll', updateProgress, { passive: true })
   updateProgress()
 
   onUnmounted(() => {

@@ -1,76 +1,70 @@
-import { z } from 'zod'
-import { comparePassword } from '~/server/utils/password'
-import { successResponse, errorResponse } from '~/server/utils/response'
-import { useJWT } from '~/server/utils/jwt'
+import type { AuthResponse, User } from '~/types'
+import { loginSchema } from '~/schemas'
 
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-})
+// Mock user data
+const mockUsers: Array<{ id: number; username: string; email: string; password: string; role: string; nickname: string; avatar: string }> = [
+  {
+    id: 1,
+    username: 'admin',
+    email: 'admin@example.com',
+    password: 'admin123', // In real app, this should be hashed
+    role: 'admin',
+    nickname: '管理员',
+    avatar: 'https://picsum.photos/seed/admin/100/100',
+  },
+  {
+    id: 2,
+    username: 'editor',
+    email: 'editor@example.com',
+    password: 'editor123',
+    role: 'editor',
+    nickname: '编辑',
+    avatar: 'https://picsum.photos/seed/editor/100/100',
+  },
+]
 
-export default defineEventHandler(async (event) => {
-  try {
-    const body = await readBody(event)
-    const validatedData = loginSchema.parse(body)
+export default defineEventHandler(async (event): Promise<AuthResponse> => {
+  const body = await readBody(event)
 
-    const pool = useMySQL()
+  // Validate input
+  const result = loginSchema.safeParse(body)
 
-    // Find user by email
-    const [users] = await pool.execute(
-      'SELECT id, username, email, password, nickname, avatar, bio, role, created_at, updated_at FROM users WHERE email = ?',
-      [validatedData.email]
-    )
-
-    if (!Array.isArray(users) || users.length === 0) {
-      return errorResponse('邮箱或密码错误')
-    }
-
-    const user = users[0] as {
-      id: number
-      username: string
-      email: string
-      password: string
-      nickname: string | null
-      avatar: string | null
-      bio: string | null
-      role: string
-      created_at: Date
-      updated_at: Date
-    }
-
-    // Verify password
-    const isValidPassword = await comparePassword(validatedData.password, user.password)
-    if (!isValidPassword) {
-      return errorResponse('邮箱或密码错误')
-    }
-
-    // Generate token
-    const { generateToken } = useJWT()
-    const token = generateToken({
-      id: user.id,
-      email: user.email,
-      role: user.role,
+  if (!result.success) {
+    throw createError({
+      statusCode: 400,
+      message: 'Invalid input',
+      errors: result.error.flatten().fieldErrors,
     })
+  }
 
-    return successResponse({
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        nickname: user.nickname || user.username,
-        avatar: user.avatar,
-        bio: user.bio,
-        role: user.role,
-        createdAt: user.created_at.toISOString(),
-        updatedAt: user.updated_at.toISOString(),
-      },
-      token,
-    }, '登录成功')
-  } catch (error) {
-    console.error('Login error:', error)
-    if (error instanceof z.ZodError) {
-      return errorResponse('输入数据格式错误')
-    }
-    return errorResponse('登录失败，请稍后重试')
+  const { email, password } = result.data
+
+  // Find user
+  const user = mockUsers.find((u) => u.email === email)
+
+  if (!user || user.password !== password) {
+    throw createError({
+      statusCode: 401,
+      message: 'Invalid email or password',
+    })
+  }
+
+  // Generate token (in real app, use JWT)
+  const token = `mock-jwt-token-${user.id}-${Date.now()}`
+
+  // Return response
+  return {
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      nickname: user.nickname,
+      avatar: user.avatar,
+      role: user.role as 'admin' | 'editor' | 'user',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    token,
+    expiresIn: 7 * 24 * 60 * 60, // 7 days in seconds
   }
 })

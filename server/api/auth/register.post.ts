@@ -1,68 +1,69 @@
-import { z } from 'zod'
-import { hashPassword } from '~/server/utils/password'
-import { successResponse, errorResponse } from '~/server/utils/response'
-import { useJWT } from '~/server/utils/jwt'
+import type { AuthResponse } from '~/types'
+import { registerSchema } from '~/schemas'
 
-const registerSchema = z.object({
-  username: z.string().min(3).max(50),
-  email: z.string().email(),
-  password: z.string().min(6).max(100),
-  nickname: z.string().max(50).optional(),
-})
+// Mock user storage (in real app, use database)
+const mockUsers: Array<{ id: number; username: string; email: string; password: string; role: string }> = [
+  { id: 1, username: 'admin', email: 'admin@example.com', password: 'admin123', role: 'admin' },
+]
 
-export default defineEventHandler(async (event) => {
-  try {
-    const body = await readBody(event)
-    const validatedData = registerSchema.parse(body)
+export default defineEventHandler(async (event): Promise<AuthResponse> => {
+  const body = await readBody(event)
 
-    const pool = useMySQL()
+  // Validate input
+  const result = registerSchema.safeParse(body)
 
-    // Check if user already exists
-    const [existingUsers] = await pool.execute(
-      'SELECT id FROM users WHERE email = ? OR username = ?',
-      [validatedData.email, validatedData.username]
-    )
-
-    if (Array.isArray(existingUsers) && existingUsers.length > 0) {
-      return errorResponse('用户名或邮箱已存在')
-    }
-
-    // Hash password
-    const hashedPassword = await hashPassword(validatedData.password)
-
-    // Insert user
-    const [result] = await pool.execute(
-      `INSERT INTO users (username, email, password, nickname, role, created_at, updated_at)
-       VALUES (?, ?, ?, ?, 'user', NOW(), NOW())`,
-      [validatedData.username, validatedData.email, hashedPassword, validatedData.nickname || validatedData.username]
-    )
-
-    const insertResult = result as { insertId: number }
-    const userId = insertResult.insertId
-
-    // Generate token
-    const { generateToken } = useJWT()
-    const token = generateToken({
-      id: userId,
-      email: validatedData.email,
-      role: 'user',
+  if (!result.success) {
+    throw createError({
+      statusCode: 400,
+      message: 'Invalid input',
+      errors: result.error.flatten().fieldErrors,
     })
+  }
 
-    return successResponse({
-      user: {
-        id: userId,
-        username: validatedData.username,
-        email: validatedData.email,
-        nickname: validatedData.nickname || validatedData.username,
-        role: 'user',
-      },
-      token,
-    }, '注册成功')
-  } catch (error) {
-    console.error('Register error:', error)
-    if (error instanceof z.ZodError) {
-      return errorResponse('输入数据格式错误')
-    }
-    return errorResponse('注册失败，请稍后重试')
+  const { username, email, password } = result.data
+
+  // Check if email already exists
+  if (mockUsers.some((u) => u.email === email)) {
+    throw createError({
+      statusCode: 409,
+      message: 'Email already registered',
+    })
+  }
+
+  // Check if username already exists
+  if (mockUsers.some((u) => u.username === username)) {
+    throw createError({
+      statusCode: 409,
+      message: 'Username already taken',
+    })
+  }
+
+  // Create new user
+  const newUser = {
+    id: mockUsers.length + 1,
+    username,
+    email,
+    password, // In real app, hash the password
+    role: 'user',
+  }
+
+  mockUsers.push(newUser)
+
+  // Generate token
+  const token = `mock-jwt-token-${newUser.id}-${Date.now()}`
+
+  return {
+    user: {
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
+      nickname: newUser.username,
+      avatar: `https://picsum.photos/seed/${newUser.username}/100/100`,
+      role: 'user',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    token,
+    expiresIn: 7 * 24 * 60 * 60,
   }
 })

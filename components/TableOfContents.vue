@@ -30,14 +30,6 @@ const parseHeadings = (html: string) => {
   return headings
 }
 
-// Generate ID from text
-const generateId = (text: string) => {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-')
-    .replace(/^-|-$/g, '')
-}
-
 onMounted(() => {
   // Parse headings
   tocItems.value = parseHeadings(props.content)
@@ -86,9 +78,9 @@ const scrollToHeading = (id: string) => {
       <button
         v-for="item in tocItems"
         :key="item.id"
-        class="block w-full truncate rounded px-2 py-1 text-left text-sm transition-colors hover:bg-accent"
+        class="block w-full truncate rounded px-2 py-1.5 text-left text-sm transition-colors hover:bg-accent"
         :class="[
-          activeId === item.id ? 'bg-accent text-primary' : 'text-muted-foreground',
+          activeId === item.id ? 'bg-accent text-primary font-medium' : 'text-muted-foreground',
           item.level === 2 ? 'pl-2' : '',
           item.level === 3 ? 'pl-4' : '',
           item.level === 4 ? 'pl-6' : '',
